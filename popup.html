@@ -1,17 +1,153 @@
 <!DOCTYPE html>
-
 <html>
-    <head>
-        <title>Hello World</title>
-        <script src="jquery-3.6.0.min.js">
-            
-        </script>
-        <script src="popup.js">
-            
-        </script>
-    </head>
-    <body>
-        <h2 id="greet">Hello World!</h2>
-        <input id="name" type="text"/>
-    </body>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div class="tab">
+      <!-- <button class="tablinks active">
+        Toggle On / Off
+      </button> -->
+      <button class="tablinks">
+        All Notes
+      </button>
+      <button class="tablinks">
+        Highlight Color
+      </button>
+    </div>
+
+    <!-- TOGGLE TAB -->
+    <!-- <div id="toggle" class="tabcontent show">
+      <h3 class="on-header">Click to deactivate the extension</h3>
+      <h3 class="off-header">Click to activate the extension</h3>
+      <label class="switch">
+        <input type="checkbox" class="checkbox" checked />
+        <span class="slider round"></span>
+      </label>
+      <p class="on">On</p>
+      <p class="off">Off</p>
+      <p class="toggle-msg">Refresh page to save changes.</p>
+    </div> -->
+
+    <!-- NOTES TAB -->
+    <div id="notes" class="tabcontent" style="display:none">
+      <div class="loader"></div>
+      <div class="searchDiv">
+        <div id="expand">
+          <i class="fa fa-expand"></i>
+        </div>
+        <div id="compress">
+          <i class="fa fa-compress"></i>
+        </div>
+        <!-- <input
+          type="text"
+          placeholder="Search highlights..."
+          class="searchBar"
+          /> -->
+        <!-- <i class="fa fa-search"></i> -->
+        <span class="searchBar"></span>
+      </div>
+      <h4 class="url-header wrap"></h4>
+      <div class="notesDiv"></div>
+      <div class="spacer"></div>
+    </div>
+
+    <!-- COLOR PICKER TAB -->
+    <div id="color" class="tabcontent" style="display:none">
+      <form>
+        <h3>Select a custom highlight color for this URL:</h3>
+        <input type="color" class="colorPicker" />
+        <input type="submit" value="Reset to #CFFFDF" class="reset" />
+        <div class="success-msg-reset" style="display: none; margin-top: 12px;">
+          Color reset! Refresh to see changes.
+        </div>
+        <br /><br />
+        <input
+          class="thisWebsite"
+          type="submit"
+          value="Change For This Website Only"
+        />
+      </form>
+      <div class="success-msg" style="display: none; margin-top: 12px;">
+        Success! Refresh to see changes.
+      </div>
+      <hr style="margin: 30px auto" />
+      <div class="example-text-div">
+        <h3>Example</h3>
+        <!-- <p>
+          Filler text is text that shares some characteristics of a real written
+          text, but is random or otherwise generated.
+          <span class="example-text"
+            >The process of using filler text is sometimes called greeking,
+            although the text itself may be nonsense</span
+          >
+          , or largely Latin, as in Lorem ipsum.
+        </p> -->
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt
+          <span class="example-text"
+            >ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+            nostrud exercitation ullamco</span
+          >
+          laboris nisi ut aliquip ex ea commodo consequat.
+        </p>
+      </div>
+    </div>
+    <footer class="footer">
+      <p class="footer-header">
+        Instructions <i class="fa fa-chevron-up instructions-up"></i
+        ><i class="fa fa-chevron-down instructions-down"></i>
+      </p>
+      <div class="instructions">
+        <ol>
+          <h4>Highlight</h4>
+          <li>Drag your cursor over text to select it</li>
+          <li>
+            (Mac) Press
+            <span style="text-decoration: underline">⌘ + K</span> on keyboard
+          </li>
+          <li>
+            (PC) Press
+            <span style="text-decoration: underline">Ctrl + K</span> on keyboard
+          </li>
+          <h4>Add Notes</h4>
+          <li>Double click highlighted text</li>
+          <li>
+            To view notes, hover over highlight for 1s
+          </li>
+          <h4>Clear Highlights for Current URL</h4>
+          <li>
+            (Mac) Press
+            <span style="text-decoration: underline">⌘ + Shift + A</span> on
+            keyboard
+          </li>
+          <li>
+            (PC) Press
+            <span style="text-decoration: underline">Ctrl + Shift + A</span> on
+            keyboard
+          </li>
+        </ol>
+        <p style="color: red; font-size: 11px">
+          * Cannot highlight across line breaks (such as two different
+          paragraphs or list items)
+        </p>
+      </div>
+    </footer>
+    <script src="popup.js" type="text/javascript"></script>
+  </body>
 </html>
+
+<!-- instructions footer with arrow up and down -->

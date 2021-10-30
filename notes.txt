@@ -1,0 +1,141 @@
+
+1. background script listens for an event to wake it up (icon click)
+2. grab the window object
+2. highlight text and store it in storage
+3. * text is now highlighted *
+
+4. highlight over some of the highlighted text 
+5. * the selected text gets unhighlighted *
+
+click the icon to load the background script
+chrome.runtime.getBackgroundPage(function callback) => gets the window object
+
+to do:
+- shorten functions
+- clean up console.log 
+- comment code
+- come up with a logo
+- publish to chrome extensions store 
+- add github readme
+
+Version 2.0
+- ability to store highlights that wrap around elements (<a>, <code>, <em>, etc)
+  - i'm storing only the text of the parent node which ends as soon as an inline element appears
+- only highlight the actual word highlighted (not every instance of that)
+  - store the indexOf of that word? 
+  - SOLVED: new problem - if you highlight a string that appears twice in the parent element,
+    on refresh it will only apply highlight to the first appearance of that string 
+    regardless of which one you actually highlighted
+- choose what color you want to highlight 
+
+
+PROBLEM AT HAND
+--- URL and span text are overwriting the previous values every new highlight
+--- your highlights are stored but your unhighlights are not unstored
+--- GLOBAL VARIABLE?
+
+
+
+document.getElementsByTagName("body")[0].onmouseup = highlight();
+
+// must be outside og highlights scope or else elements are not added to [url] array
+var highlights = {};
+
+function highlight() {
+
+    document.designMode = "on";
+    var url = window.location.href.toString();
+    var text = window.getSelection();
+    var range = window.getSelection().getRangeAt(0);
+    text.removeAllRanges();
+    text.addRange(range); // {Selection obj, anchorNode, focusNode, etc}
+    var hTag = text.anchorNode.parentElement; // <span bg=(rgba)>...</span>
+    var savedText = text;
+    
+    // highlight / remove highlight
+    if (hTag.style.backgroundColor == 'rgb(199, 255, 216)') {
+        hTag.style.backgroundColor = 'transparent';
+        chrome.storage.sync.get('highlights', (results) => {            
+            highlights = results.highlights;
+            var index = highlights[url].indexOf(savedText.anchorNode.textContent);
+            var removedEl = highlights[url].splice(index, 1);
+            chrome.storage.sync.set({highlights}, () => {
+                console.log('element removed: ' + removedEl);        
+            });
+        });
+        // TO DO: loop through highlights[url] to remove highlight
+    } else {
+        document.execCommand("HiliteColor", false, '#C7FFD8');
+        // async -- need this to access highlights object
+        chrome.storage.sync.get('highlights', (results) => {            
+            // if its the first time highlighting on this page,
+            // results.highlights[url] will not exist, so we initialize
+            // an empty array for new highlights to be stored on this page
+            // where the url is the new key
+            if (!results.highlights[url]) {
+                highlights[url] = [];
+            } else {
+                highlights = results.highlights;
+            }
+            // (results.highlights[url] == 'undefined') ? highlights[url] = [] : highlights = results.highlights;
+
+            highlights[url].push(savedText.anchorNode.textContent);
+            chrome.storage.sync.set({highlights}, () => {
+                console.log('data saved: ' + highlights[url][highlights[url].length-1]);        
+            });
+        });
+    }
+
+    document.designMode = "off";
+
+    // NEED TO MAKE IT SO IF YOU UNHIGHLIGHT IT REMOVES THE STRING FROM 
+    // SEARCH OBJECT FOR STRING AND IF YOU FIND IT AND IT'S ALONE REMOVE IT
+    // BUT IF ITS IN THE MIDDLE OF OTHER STRINGS SPLIT THEM INTO THEIR OWN ARRAY ELEMENTS
+        
+};
+
+//     "highlights" = {
+//         googlecom: [text],
+//         yahoocom: [text2, text3],
+//     }
+// }
+
+
+
+next iteration
+- tool tip on highlight
+    - popup.html with toggle bar to turn on/off extensions
+- popup.html showing all highlights with a link to the page
+
+
+how to only highlight on one block element
+    - innderHTML.indexOf('</p>, </div>, </li>) => show tt
+
+    highlight OR copy icons
+
+Nice to have's:
+- fa-chevron-down arrow flip when clicked (so it's facing up when notes are showing)
+
+
+
+
+FIX - CHANGING COLOR FOR WEBSITE WITHOUT HIGHLIGHTS ALREADY
+
+FIX - if you set a highlight color for a website but dont have
+any actual highlights it will show up in your notes section
+bc technically the length is >0 bc color is in there DONE
+
+- need to display notes for highlights in notes ection\
+
+if (url.startswith "chrome") {
+    dont do anything
+} -- in permissions tab do not give permission to websites that start with chrome
+// error message in toggle screen saying the app does not 
+have access to this site
+
+recursively find the parentElement tagName that is a block element 
+for the startContainer and the endContainer and compare them 
+range.startContainer.parentElement.tagName == DIV ? 
+range.startContainer.parentElement.parentElement.tagName == DIV?
+
+need a custom font
